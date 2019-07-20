@@ -1,0 +1,23 @@
+spring:
+  application:
+    name: vehicle-service
+server:
+  port: 8083
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${EUREKA_SERVER:localhost}:${EUREKA_PORT:8761}/eureka/
+management:
+  endpoints:
+    web:
+      exposure:
+        include:
+        - hystrix.stream
+br:
+  com:
+    danilopaixao:
+      service:
+        driver:
+          protocol: http 
+          host: driver-service
+          version: v1 
