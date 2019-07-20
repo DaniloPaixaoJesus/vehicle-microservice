@@ -1,49 +1,39 @@
 package br.com.danilopaixao.vehicle.model;
 
-public class Vehicle {
-	
-	private String name;
-	private String desc;
-	private int rating;
-	
-	private String driverName;
-	private String driverId;
+import java.io.Serializable;
 
-	public Vehicle(String name, String desc, int rating, String driverName, String driverId) {
-		super();
-		this.name = name;
-		this.desc = desc;
-		this.rating = rating;
-		this.driverId = driverId;
-		this.driverName = driverName;
-	}
+public class Vehicle implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1564541072875906508L;
+	
+	private String vin;
+	private String regNumber;
+	private String name;
+	private String driverId;
+	private String status;
+
+	public Vehicle() {}
+
+	public Vehicle(String vin, String regNumber, String name, String status, String driverId) {
+		super();
+		this.vin = vin;
+		this.regNumber = regNumber;
+		this.name = name;
+		this.status = status;
+		this.driverId = driverId;
+	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getDesc() {
-		return desc;
-	}
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
-	public int getRating() {
-		return rating;
-	}
-	public void setRating(int rating) {
-		this.rating = rating;
-	}
 
-	public String getDriverName() {
-		return driverName;
-	}
-
-	public void setDriverName(String driverName) {
-		this.driverName = driverName;
-	}
 
 	public String getDriverId() {
 		return driverId;
@@ -52,5 +42,29 @@ public class Vehicle {
 	public void setDriverId(String driverId) {
 		this.driverId = driverId;
 	}
-	
+
+	public String getVin() {
+		return vin;
+	}
+
+	public void setVin(String vin) {
+		this.vin = vin;
+	}
+
+	public String getRegNumber() {
+		return regNumber;
+	}
+
+	public void setRegNumber(String regNumber) {
+		this.regNumber = regNumber;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
 }

@@ -2,85 +2,113 @@ package br.com.danilopaixao.vehicle.service;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import br.com.danilopaixao.vehicle.model.Driver;
 import br.com.danilopaixao.vehicle.model.Vehicle;
+import br.com.danilopaixao.vehicle.model.VehicleSummary;
 
 @Service
 public class VehicleService {
 	
-	@Value("${br.com.danilopaixao.service.driver.host}")
-	private String hostDriverService;
-	
-	@Value("${br.com.danilopaixao.service.driver.protocol}")
-	private String protocolDriverService;
-	
-	@Value("${br.com.danilopaixao.service.driver.version}")
-	private String versionDriverService;
-	
 	@Autowired
-	private RestTemplate restTemplate;
+	private DriverService driverService;
+	
+	private static List<Vehicle> vehiclesMock = Arrays.asList(
+			new Vehicle("YS2R4X20005399401", "ABC123", "VW GOLF", "ON", "93418DF0R09QSDF"),
+			new Vehicle("VLUR4X20009093588", "DEF456", "VW AMAROK", "ON", "93418DF0R09QSDF"),
+			new Vehicle("VLUR4X20009048066", "GHI789", "FIAT TORO", "ON", "93418DF0R09QSDF"),
+			
+			new Vehicle("YS2R4X20005388011", "JKL012", "FORD EDGE", "ON", "623480520FDF2"),
+			new Vehicle("YS2R4X20005387949", "MNO345", "FORD FOCUS", "ON", "623480520FDF2"),
+			
+			new Vehicle("YS2R4X20005387765", "PQR678", "VOLVO XC60", "ON", "93418DF0R09QSDF"),
+			new Vehicle("YS2R4X20005387055", "STU901", "VOLVO XC90 ", "ON", "93418DF0R09QSDF")
+	);
 	
 	
-	@HystrixCommand(fallbackMethod ="getAllVehicleFallBack",
-			threadPoolKey = "getAllVehicleThreadPool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "75"),
-					@HystrixProperty(name = "maxQueueSize", value = "35")
-			},
-			commandProperties = {
-				@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-				@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
-				@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-				@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")
-			}
-	)
+	public Vehicle updateStatus(final String vin, final String status){
+		return this.updateStatusFromRepository(vin)
+							.map(v -> this.getVehicleFromRepository(vin))
+							.orElse(null);
+	}
+	
+	public List<VehicleSummary> getAllVehicleSummary(){
+		return this.getAllVehicle().stream()
+									.map(vehicle -> {
+											Driver driver = driverService.getDriver(vehicle.getDriverId());
+											VehicleSummary vehicleSummary = new VehicleSummary(
+																	vehicle.getVin(), 
+																	vehicle.getRegNumber(), 
+																	vehicle.getName(), 
+																	driver.getId(), 
+																	driver.getName(), 
+																	driver.getLicenseCategory(), 
+																	driver.getAddress(), 
+																	vehicle.getStatus());
+											return vehicleSummary;
+									}).collect(Collectors.toList());
+	}
+	
+	public VehicleSummary getVehicleSummary(final String vin){
+		return this.getVehicleOptional(vin)
+						.map(vehicle -> {
+							Driver driver = driverService.getDriver(vehicle.getDriverId());
+							VehicleSummary vehicleSummary = new VehicleSummary(
+									vehicle.getVin(), 
+									vehicle.getRegNumber(), 
+									vehicle.getName(), 
+									driver.getId(), 
+									driver.getName(), 
+									driver.getLicenseCategory(), 
+									driver.getAddress(), 
+									vehicle.getStatus());
+							return vehicleSummary;
+						}).orElse(null);
+	}
+	
 	public List<Vehicle> getAllVehicle(){
-		Driver driver = restTemplate.getForObject(this.protocolDriverService+"://"+this.hostDriverService+"/api/"+this.versionDriverService+"/drivers/testeAllVehicle", Driver.class);
-		List<Vehicle> vehicles = Arrays.asList(
-				new Vehicle("VEHICLE NAME TESTE 1", "VEHICLE DESCRIPTION  TESTE 1", 0, driver.getName(), driver.getId()),
-				new Vehicle("VEHICLE NAME TESTE 2", "VEHICLE DESCRIPTION  TESTE 2", 0, driver.getName(), driver.getId()),
-				new Vehicle("VEHICLE NAME TESTE 3", "VEHICLE DESCRIPTION  TESTE 3", 0, driver.getName(), driver.getId()),
-				new Vehicle("VEHICLE NAME TESTE 4", "VEHICLE DESCRIPTION  TESTE 4", 0, driver.getName(), driver.getId())
-		);
-		return vehicles;
+		return this.getAllVehicleFromRepository();
 	}
 	
-	public List<Vehicle> getAllVehicleFallBack(){
-		List<Vehicle> vehicles = Arrays.asList(
-				new Vehicle("NOT FOUND", "", 0, null, null)
-		);
-		return vehicles;
+	public Optional<Vehicle> getVehicleOptional(final String vin){
+		return Optional.of(this.getVehicleFromRepository(vin));
 	}
 	
-	@HystrixCommand(fallbackMethod ="getVehicleFallBack",
-			threadPoolKey = "getVehicleThreadPool",
-			threadPoolProperties = {
-					@HystrixProperty(name = "coreSize", value = "75"),
-					@HystrixProperty(name = "maxQueueSize", value = "35")
-			},
-			commandProperties = {
-				@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "2000"),
-				@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "5"),
-				@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "50"),
-				@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")
-			}
-	)
-	public Vehicle getVehicle(String vehicleId){
-		Driver driver = restTemplate.getForObject(this.protocolDriverService+"://"+this.hostDriverService+"/api/"+this.versionDriverService+"/drivers/"+vehicleId, Driver.class);
-		return new Vehicle("VEHICLE NAME", "VEHICLE DESCRIPTION", 0, driver.getName(), "IDDRIVER");
+	
+	/**
+	 * TODO: Metodos serao substituidos depois que fizer a classe Repository
+	 * 
+	 */
+	
+	private Vehicle getVehicleFromRepository(final String vin){
+		/**
+		 * TODO: code repository and mongo db access
+		 */
+		Vehicle vehicle = this.getAllVehicleFromRepository().stream()
+								.filter(v -> v.getVin().equalsIgnoreCase(vin))
+								.findFirst()
+								.orElse(null);
+		return vehicle;
 	}
 	
-	public Vehicle getVehicleFallBack(String vehicleId){
-		return new Vehicle("NOT FOUND", "", 0, "", "");
+	public Optional<Vehicle> updateStatusFromRepository(final String vin){
+		/**
+		 * TODO: code repository and mongo db access
+		 * 		 this method goes to database and execute a update
+		 */
+		return Optional.of(this.getVehicleFromRepository(vin));
+	}
+	
+	public List<Vehicle> getAllVehicleFromRepository(){
+		/**
+		 * TODO: code repository and mongo db access
+		 */
+		return vehiclesMock;
 	}
 	
 }
