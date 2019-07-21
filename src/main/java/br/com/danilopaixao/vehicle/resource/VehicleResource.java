@@ -30,10 +30,16 @@ public class VehicleResource {
 		return service.getAllVehicleSummary();
 	}
 	
+	@RequestMapping(value="/{vin}/summary", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody VehicleSummary getVehicleSummary(@PathVariable("vin") final String vin){
+		return service.getVehicleSummary(vin);
+	}
+	
 	@RequestMapping(value="/{vin}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody VehicleSummary getVehicle(@PathVariable("vin") final String vin){
-		return service.getVehicleSummary(vin);
+	public @ResponseBody Vehicle getVehicle(@PathVariable("vin") final String vin){
+		return service.getVehicle(vin);
 	}
 	
 	@PutMapping(value="/{vin}/status", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

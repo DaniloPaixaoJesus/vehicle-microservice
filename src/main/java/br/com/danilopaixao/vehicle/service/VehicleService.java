@@ -79,6 +79,10 @@ public class VehicleService {
 		return Optional.of(this.getVehicleFromRepository(vin));
 	}
 	
+	public Vehicle getVehicle(final String vin){
+		return this.getVehicleFromRepository(vin);
+	}
+	
 	
 	/**
 	 * TODO: Metodos serao substituidos depois que fizer a classe Repository
