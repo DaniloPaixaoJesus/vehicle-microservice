@@ -21,3 +21,6 @@ br:
           protocol: http 
           host: driver-service
           version: v1 
+        vehicle:
+          socket:
+            url: ${WEB_SOCKET_PROTOCOL:http}://${WEB_SOCKET_HOST:vehicle-websocket}:${WEB_SOCKET_PORT:8085}

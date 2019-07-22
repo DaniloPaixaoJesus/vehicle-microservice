@@ -18,6 +18,9 @@ public class VehicleService {
 	@Autowired
 	private DriverService driverService;
 	
+	@Autowired
+	VehicleSocketService vehicleSocketService;
+	
 	private static List<Vehicle> vehiclesMock = Arrays.asList(
 			new Vehicle("YS2R4X20005399401", "ABC123", "VW GOLF", "ON", "93418DF0R09QSDF"),
 			new Vehicle("VLUR4X20009093588", "DEF456", "VW AMAROK", "ON", "93418DF0R09QSDF"),
@@ -32,6 +35,7 @@ public class VehicleService {
 	
 	
 	public Vehicle updateStatus(final String vin, final String status){
+		vehicleSocketService.updateStatusWebSocket(vin, status);
 		return this.updateStatusFromRepository(vin)
 							.map(v -> this.getVehicleFromRepository(vin))
 							.orElse(null);
@@ -100,7 +104,7 @@ public class VehicleService {
 		return vehicle;
 	}
 	
-	public Optional<Vehicle> updateStatusFromRepository(final String vin){
+	private Optional<Vehicle> updateStatusFromRepository(final String vin){
 		/**
 		 * TODO: code repository and mongo db access
 		 * 		 this method goes to database and execute a update
@@ -108,7 +112,7 @@ public class VehicleService {
 		return Optional.of(this.getVehicleFromRepository(vin));
 	}
 	
-	public List<Vehicle> getAllVehicleFromRepository(){
+	private List<Vehicle> getAllVehicleFromRepository(){
 		/**
 		 * TODO: code repository and mongo db access
 		 */
