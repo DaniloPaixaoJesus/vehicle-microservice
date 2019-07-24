@@ -33,10 +33,12 @@ public class VehicleService {
 		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005399401", "ABC123", "VW GOLF", "OFF", "93418DF0R09QSDF"));}catch(Exception e) {}
 		try{vehicleMongoRepository.insert(new Vehicle("VLUR4X20009093588", "DEF456", "VW AMAROK", "OFF", "93418DF0R09QSDF"));}catch(Exception e) {}
 		try{vehicleMongoRepository.insert(new Vehicle("VLUR4X20009048066", "GHI789", "FIAT TORO", "OFF", "93418DF0R09QSDF"));}catch(Exception e) {}
+		
 		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005388011", "JKL012", "FORD EDGE", "OFF", "623480520FDF2"));}catch(Exception e) {}
 		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005387949", "MNO345", "FORD FOCUS", "OFF", "623480520FDF2"));}catch(Exception e) {}
-		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005387765", "PQR678", "VOLVO XC60", "OFF", "93418DF0R09QSDF"));}catch(Exception e) {}
-		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005387055", "STU901", "VOLVO XC90 ", "OFF", "93418DF0R09QSDF"));}catch(Exception e) {}
+		
+		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005387765", "PQR678", "VOLVO XC60", "OFF", "7428DFEC8137652"));}catch(Exception e) {}
+		try{vehicleMongoRepository.insert(new Vehicle("YS2R4X20005387055", "STU901", "VOLVO XC90 ", "OFF", "7428DFEC8137652"));}catch(Exception e) {}
 		
 		return getAllVehicle();
 		
