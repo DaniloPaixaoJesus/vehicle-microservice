@@ -24,6 +24,12 @@ public class VehicleResource {
 	@Autowired
 	private VehicleService service;
 	
+	@RequestMapping(value="/init", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public @ResponseBody List<Vehicle> init(){
+		return service.init();
+	}
+	
 	@RequestMapping(value="", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody List<VehicleSummary> getAllVehicle(){

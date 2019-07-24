@@ -2,6 +2,10 @@ package br.com.danilopaixao.vehicle.model;
 
 import java.io.Serializable;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "vehicle")
 public class Vehicle implements Serializable{
 	
 	/**
@@ -9,6 +13,7 @@ public class Vehicle implements Serializable{
 	 */
 	private static final long serialVersionUID = 1564541072875906508L;
 	
+	@Id
 	private String vin;
 	private String regNumber;
 	private String name;

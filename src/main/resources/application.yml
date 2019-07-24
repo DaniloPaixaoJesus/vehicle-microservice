@@ -1,6 +1,11 @@
 spring:
   application:
     name: vehicle-service
+  data:
+    mongodb:
+      host: ${MONGO_HOST:localhost}
+      port: ${MONGO_PORT:27018}
+      database: ${MONGO_DATABASE:vehicledb}
 server:
   port: 8083
 eureka:
