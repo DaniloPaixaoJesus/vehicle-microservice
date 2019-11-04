@@ -8,6 +8,7 @@ import org.springframework.web.client.RestTemplate;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
+import br.com.danilopaixao.vehicle.enums.StatusEnum;
 import br.com.danilopaixao.vehicle.model.VehicleTrackWSocket;
 
 
@@ -33,12 +34,12 @@ public class VehicleSocketService {
 				@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "5000")
 			}
 	)
-	public String updateStatusWebSocket(String vin, String status) {
+	public String updateStatusWebSocket(String vin, StatusEnum status) {
 		String url = urlVehicleSocketService + "/api/v1/vehicle/" + vin + "/status";
 		restTemplate.put(url, new VehicleTrackWSocket(vin, status));
 		return vin;
 	}
-	public String updateStatusWebSocketFallBack(String vin, String status) {
+	public String updateStatusWebSocketFallBack(String vin, StatusEnum status) {
 		return vin;
 	}
 	

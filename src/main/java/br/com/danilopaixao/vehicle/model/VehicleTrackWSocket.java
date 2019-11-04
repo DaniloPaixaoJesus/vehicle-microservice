@@ -2,6 +2,8 @@ package br.com.danilopaixao.vehicle.model;
 
 import java.io.Serializable;
 
+import br.com.danilopaixao.vehicle.enums.StatusEnum;
+
 public class VehicleTrackWSocket implements Serializable{
 
 	/**
@@ -10,12 +12,12 @@ public class VehicleTrackWSocket implements Serializable{
 	private static final long serialVersionUID = -8659998311539411802L;
 	
 	private String vin;
-	private String status;
+	private StatusEnum status;
 
 	public VehicleTrackWSocket() {
 	}
 	
-	public VehicleTrackWSocket(String vin, String status) {
+	public VehicleTrackWSocket(String vin, StatusEnum status) {
 		super();
 		this.setVin(vin);
 		this.setStatus(status);
@@ -29,11 +31,11 @@ public class VehicleTrackWSocket implements Serializable{
 		this.vin = vin;
 	}
 
-	public String getStatus() {
+	public StatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(StatusEnum status) {
 		this.status = status;
 	}
 	

@@ -3,13 +3,15 @@ spring:
     name: vehicle-service
   data:
     mongodb:
-      host: ${MONGO_HOST:localhost}
-      port: ${MONGO_PORT:27018}
-      database: ${MONGO_DATABASE:vehicledb}
+      uri: mongodb+srv://admin:admin@cluster0-1h4ej.mongodb.net/test?retryWrites=true&w=majority
+      #host: ${MONGO_HOST:cluster0-1h4ej.mongodb.net}
+      #port: ${MONGO_PORT:27018}
+      database: springclouddb
 server:
   port: 8083
 eureka:
   client:
+    enabled: false
     serviceUrl:
       defaultZone: http://${EUREKA_SERVER:localhost}:${EUREKA_PORT:8761}/eureka/
 management:

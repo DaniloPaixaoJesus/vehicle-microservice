@@ -2,6 +2,8 @@ package br.com.danilopaixao.vehicle.model;
 
 import java.io.Serializable;
 
+import br.com.danilopaixao.vehicle.enums.StatusEnum;
+
 /**
  * 
 |-----------------------------------|
@@ -28,7 +30,7 @@ public class VehicleSummary implements Serializable{
 	private String regNumber;
 	private String name;
 	private String driverId;
-	private String status;
+	private StatusEnum status;
 
 	private String driverName;
 	private String driverLicenseCategory;
@@ -37,7 +39,7 @@ public class VehicleSummary implements Serializable{
 	public VehicleSummary() {}
 
 	public VehicleSummary(String vin, String regNumber, String name, String driverId, String driverName,
-			String driverLicenseCategory, String driverAddress, String status) {
+			String driverLicenseCategory, String driverAddress, StatusEnum status) {
 		super();
 		this.vin = vin;
 		this.regNumber = regNumber;
@@ -105,11 +107,11 @@ public class VehicleSummary implements Serializable{
 		this.driverLicenseCategory = driverLicenseCategory;
 	}
 
-	public String getStatus() {
+	public StatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(StatusEnum status) {
 		this.status = status;
 	}
 

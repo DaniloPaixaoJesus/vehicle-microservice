@@ -5,6 +5,8 @@ import java.io.Serializable;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import br.com.danilopaixao.vehicle.enums.StatusEnum;
+
 @Document(collection = "vehicle")
 public class Vehicle implements Serializable{
 	
@@ -18,11 +20,11 @@ public class Vehicle implements Serializable{
 	private String regNumber;
 	private String name;
 	private String driverId;
-	private String status;
+	private StatusEnum status;
 
 	public Vehicle() {}
 
-	public Vehicle(String vin, String regNumber, String name, String status, String driverId) {
+	public Vehicle(String vin, String regNumber, String name, StatusEnum status, String driverId) {
 		super();
 		this.vin = vin;
 		this.regNumber = regNumber;
@@ -64,11 +66,11 @@ public class Vehicle implements Serializable{
 		this.regNumber = regNumber;
 	}
 
-	public String getStatus() {
+	public StatusEnum getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
+	public void setStatus(StatusEnum status) {
 		this.status = status;
 	}
 

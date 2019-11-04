@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.danilopaixao.vehicle.enums.StatusEnum;
 import br.com.danilopaixao.vehicle.model.Vehicle;
 import br.com.danilopaixao.vehicle.model.VehicleSummary;
 import br.com.danilopaixao.vehicle.service.VehicleService;
@@ -51,18 +52,7 @@ public class VehicleResource {
 	@PutMapping(value="/{vin}/status", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Vehicle updateStatus(@PathVariable("vin") final String vin,
-			@RequestBody(required = true) final String status){
+			@RequestBody(required = true) final StatusEnum status){
 		return service.updateStatus(vin, status);
 	}
 }
-
-
-//@Autowired
-//WebClient.Builder builderWebClient;
-
-//Movie movietest = builderWebClient.build()
-//		.get()
-//		.uri("http://driver/movies/foo")
-//		.retrieve()
-//		.bodyToMono(Movie.class)
-//		.block();
