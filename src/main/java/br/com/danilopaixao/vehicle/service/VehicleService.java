@@ -61,7 +61,7 @@ public class VehicleService {
 		return this.getAllVehicle().stream()
 									.map(vehicle -> {
 											Driver driver = driverService.getDriver(vehicle.getDriverId());
-											VehicleSummary vehicleSummary = new VehicleSummary(
+											return new VehicleSummary(
 																	vehicle.getVin(), 
 																	vehicle.getRegNumber(), 
 																	vehicle.getName(), 
@@ -70,7 +70,6 @@ public class VehicleService {
 																	driver.getLicenseCategory(), 
 																	driver.getAddress(), 
 																	vehicle.getStatus());
-											return vehicleSummary;
 									}).collect(Collectors.toList());
 	}
 	
@@ -79,7 +78,7 @@ public class VehicleService {
 		return this.getVehicleOptional(vin)
 						.map(vehicle -> {
 							Driver driver = driverService.getDriver(vehicle.getDriverId());
-							VehicleSummary vehicleSummary = new VehicleSummary(
+							return new VehicleSummary(
 									vehicle.getVin(), 
 									vehicle.getRegNumber(), 
 									vehicle.getName(), 
@@ -88,7 +87,6 @@ public class VehicleService {
 									driver.getLicenseCategory(), 
 									driver.getAddress(), 
 									vehicle.getStatus());
-							return vehicleSummary;
 						}).orElse(null);
 	}
 	
@@ -104,7 +102,6 @@ public class VehicleService {
 	
 	public Vehicle getVehicle(final String vin){
 		logger.info("##VehicleService#getVehicle vin {}", vin);
-		//return this.vehicleRepository.findByVin(vin);
 		return vehicleMongoRepository.findById(vin).orElse(null);
 	}
 	
