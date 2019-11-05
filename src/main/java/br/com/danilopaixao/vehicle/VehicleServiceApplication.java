@@ -9,8 +9,6 @@ import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboar
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
-import br.com.danilopaixao.vehicle.repository.VehicleRepository;
-
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableCircuitBreaker
@@ -19,11 +17,6 @@ public class VehicleServiceApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(VehicleServiceApplication.class, args);
-    }
-    
-    @Bean
-    public VehicleRepository getVehicleRepository() {
-    	return new VehicleRepository();
     }
     
     @Bean

@@ -4,8 +4,6 @@ spring:
   data:
     mongodb:
       uri: mongodb://admin:senha123@ds141208.mlab.com:41208/springclouddb
-      #host: ${MONGO_HOST:cluster0-1h4ej.mongodb.net}
-      #port: ${MONGO_PORT:27018}
       database: springclouddb
 server:
   port: 8083
@@ -25,9 +23,7 @@ br:
     danilopaixao:
       service:
         driver:
-          protocol: http 
-          host: driver-service
-          version: v1 
+          url: http://driver-service/api/v1
         vehicle:
           socket:
-            url: ${WEB_SOCKET_PROTOCOL:http}://${WEB_SOCKET_HOST:vehicle-websocket}:${WEB_SOCKET_PORT:8085}
+            url: http://vehicle-websocket:8085/api/v1/vehicle

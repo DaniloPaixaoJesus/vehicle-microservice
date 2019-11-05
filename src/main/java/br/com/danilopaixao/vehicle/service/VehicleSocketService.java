@@ -1,5 +1,7 @@
 package br.com.danilopaixao.vehicle.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,8 +17,10 @@ import br.com.danilopaixao.vehicle.model.VehicleTrackWSocket;
 @Service
 public class VehicleSocketService {
 	
+	private static final Logger logger = LoggerFactory.getLogger(VehicleSocketService.class);
+	
 	@Value("${br.com.danilopaixao.service.vehicle.socket.url}")
-	private String urlVehicleSocketService;
+	private static String urlVehicleSocketService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -35,11 +39,13 @@ public class VehicleSocketService {
 			}
 	)
 	public String updateStatusWebSocket(String vin, StatusEnum status) {
-		String url = urlVehicleSocketService + "/api/v1/vehicle/" + vin + "/status";
+		logger.info("##VehicleSocketService#updateStatusWebSocket vin {}, status {}", vin, status);
+		String url = urlVehicleSocketService +"/" + vin + "/status";
 		restTemplate.put(url, new VehicleTrackWSocket(vin, status));
 		return vin;
 	}
 	public String updateStatusWebSocketFallBack(String vin, StatusEnum status) {
+		logger.error("##VehicleSocketService#updateStatusWebSocket vin {}, status {}", vin, status);
 		return vin;
 	}
 	

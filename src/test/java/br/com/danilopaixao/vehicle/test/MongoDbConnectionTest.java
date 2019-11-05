@@ -1,4 +1,4 @@
-package br.com.danilopaixao.vehicle;
+package br.com.danilopaixao.vehicle.test;
 
 import org.bson.Document;
 

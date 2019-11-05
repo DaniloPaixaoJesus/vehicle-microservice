@@ -2,6 +2,8 @@ package br.com.danilopaixao.vehicle.service;
 
 import java.util.Arrays;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -17,14 +19,10 @@ import br.com.danilopaixao.vehicle.model.DriverList;
 @Service
 public class DriverService {
 	
-	@Value("${br.com.danilopaixao.service.driver.host}")
-	private String hostDriverService;
+	private static final Logger logger = LoggerFactory.getLogger(DriverService.class);
 	
-	@Value("${br.com.danilopaixao.service.driver.protocol}")
-	private String protocolDriverService;
-	
-	@Value("${br.com.danilopaixao.service.driver.version}")
-	private String versionDriverService;
+	@Value("${br.com.danilopaixao.service.driver.url}")
+	private static String urlDriverService;
 	
 	@Autowired
 	private RestTemplate restTemplate;
@@ -43,7 +41,8 @@ public class DriverService {
 			}
 	)
 	public DriverList getAllDriver() {
-		return restTemplate.getForObject(this.protocolDriverService+"://"+this.hostDriverService+"/api/"+this.versionDriverService+"/drivers", DriverList.class);
+		logger.info("##DriverService#getAllDriver: no argument");
+		return restTemplate.getForObject(urlDriverService+"/drivers", DriverList.class);
 	}
 	public DriverList getAllDriverFallBack() {
 		return new DriverList(Arrays.asList(new Driver("UNAVAILABLE", "", "", "")));
@@ -63,9 +62,11 @@ public class DriverService {
 			}
 	)
 	public Driver getDriver(final String id) {
-		return restTemplate.getForObject(this.protocolDriverService+"://"+this.hostDriverService+"/api/"+this.versionDriverService+"/drivers/"+id, Driver.class);
+		logger.info("##DriverService#getDriver id: {} ", id);
+		return restTemplate.getForObject(urlDriverService+"/drivers/"+id, Driver.class);
 	}
 	public Driver getDriverFallBack(final String id) {
+		logger.error("##DriverService#getDriver id: {} ", id);
 		return new Driver("UNAVAILABLE", "", "", "");
 	}
 	

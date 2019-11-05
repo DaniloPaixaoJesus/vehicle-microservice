@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,19 +14,17 @@ import br.com.danilopaixao.vehicle.model.Driver;
 import br.com.danilopaixao.vehicle.model.Vehicle;
 import br.com.danilopaixao.vehicle.model.VehicleSummary;
 import br.com.danilopaixao.vehicle.repository.VehicleMongoRepository;
-import br.com.danilopaixao.vehicle.repository.VehicleRepository;
 
 @Service
 public class VehicleService {
+	
+	private static final Logger logger = LoggerFactory.getLogger(VehicleService.class);
 	
 	@Autowired
 	private DriverService driverService;
 	
 	@Autowired
 	private VehicleSocketService vehicleSocketService;
-	
-	//@Autowired
-	//private VehicleRepository vehicleRepository;
 	
 	@Autowired
 	private VehicleMongoRepository vehicleMongoRepository;
@@ -46,16 +46,18 @@ public class VehicleService {
 	}
 	
 	public Vehicle updateStatus(final String vin, final StatusEnum status){
+		logger.info("##VehicleService#updateStatus vin {}, status {}", vin, status);
 		vehicleSocketService.updateStatusWebSocket(vin, status);
-		Vehicle vehicle = vehicleMongoRepository.findById(vin).map(v-> {
-			v.setStatus(status);
-			return v;
-		}).get();
-		vehicleMongoRepository.save(vehicle);
-		return vehicle;
+		return vehicleMongoRepository.findById(vin)
+								.map(v-> {
+									v.setStatus(status);
+									vehicleMongoRepository.save(v);
+									return v;
+								}).orElseGet(()-> null);
 	}
 	
 	public List<VehicleSummary> getAllVehicleSummary(){
+		logger.info("##VehicleService#getAllVehicleSummary: no argument");
 		return this.getAllVehicle().stream()
 									.map(vehicle -> {
 											Driver driver = driverService.getDriver(vehicle.getDriverId());
@@ -73,6 +75,7 @@ public class VehicleService {
 	}
 	
 	public VehicleSummary getVehicleSummary(final String vin){
+		logger.info("##VehicleService#getVehicleSummary vin {}", vin);
 		return this.getVehicleOptional(vin)
 						.map(vehicle -> {
 							Driver driver = driverService.getDriver(vehicle.getDriverId());
@@ -90,14 +93,17 @@ public class VehicleService {
 	}
 	
 	public List<Vehicle> getAllVehicle(){
+		logger.info("##VehicleService#getAllVehicle: no argument");
 		return this.vehicleMongoRepository.findAll();
 	}
 	
 	public Optional<Vehicle> getVehicleOptional(final String vin){
+		logger.info("##VehicleService#getVehicleOptional vin {}", vin);
 		return Optional.of(this.getVehicle(vin));
 	}
 	
 	public Vehicle getVehicle(final String vin){
+		logger.info("##VehicleService#getVehicle vin {}", vin);
 		//return this.vehicleRepository.findByVin(vin);
 		return vehicleMongoRepository.findById(vin).orElse(null);
 	}

@@ -4,21 +4,7 @@ import java.io.Serializable;
 
 import br.com.danilopaixao.vehicle.enums.StatusEnum;
 
-/**
- * 
-|-----------------------------------|
-| Kalles Grustransporter AB         |
-| Cementvägen 8, 111 11 Södertälje  |
-|-----------------------------------|
-| VIN (VehicleId)       Reg. nr.    |
-|-----------------------------------|
-| YS2R4X20005399401     ABC123      |
-| VLUR4X20009093588     DEF456      |
-| VLUR4X20009048066     GHI789      |
-|-----------------------------------|
- * @author user
- *
- */
+
 public class VehicleSummary implements Serializable{
 	
 	/**
@@ -113,6 +99,77 @@ public class VehicleSummary implements Serializable{
 
 	public void setStatus(StatusEnum status) {
 		this.status = status;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((driverAddress == null) ? 0 : driverAddress.hashCode());
+		result = prime * result + ((driverId == null) ? 0 : driverId.hashCode());
+		result = prime * result + ((driverLicenseCategory == null) ? 0 : driverLicenseCategory.hashCode());
+		result = prime * result + ((driverName == null) ? 0 : driverName.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((regNumber == null) ? 0 : regNumber.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
+		result = prime * result + ((vin == null) ? 0 : vin.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		VehicleSummary other = (VehicleSummary) obj;
+		if (driverAddress == null) {
+			if (other.driverAddress != null)
+				return false;
+		} else if (!driverAddress.equals(other.driverAddress))
+			return false;
+		if (driverId == null) {
+			if (other.driverId != null)
+				return false;
+		} else if (!driverId.equals(other.driverId))
+			return false;
+		if (driverLicenseCategory == null) {
+			if (other.driverLicenseCategory != null)
+				return false;
+		} else if (!driverLicenseCategory.equals(other.driverLicenseCategory))
+			return false;
+		if (driverName == null) {
+			if (other.driverName != null)
+				return false;
+		} else if (!driverName.equals(other.driverName))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (regNumber == null) {
+			if (other.regNumber != null)
+				return false;
+		} else if (!regNumber.equals(other.regNumber))
+			return false;
+		if (status != other.status)
+			return false;
+		if (vin == null) {
+			if (other.vin != null)
+				return false;
+		} else if (!vin.equals(other.vin))
+			return false;
+		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "VehicleSummary [vin=" + vin + ", regNumber=" + regNumber + ", name=" + name + ", driverId=" + driverId
+				+ ", status=" + status + ", driverName=" + driverName + ", driverLicenseCategory="
+				+ driverLicenseCategory + ", driverAddress=" + driverAddress + "]";
 	}
 
 }
