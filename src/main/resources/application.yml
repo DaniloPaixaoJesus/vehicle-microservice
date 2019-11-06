@@ -6,7 +6,7 @@ spring:
       uri: mongodb://admin:senha123@ds141208.mlab.com:41208/springclouddb
       database: springclouddb
 server:
-  port: 8083
+  port: 8080
 eureka:
   client:
     enabled: false
