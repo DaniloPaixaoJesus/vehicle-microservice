@@ -1,0 +1,25 @@
+version: '2'
+services:
+    vehicle-service:
+        container_name: vehicle-service
+        build:
+            dockerfile: ./vehicle.service.dockerfile
+            context: .
+        environment:
+            - MONGODB_HOST=mongodb
+            - MONGODB_PORT=27017
+            - MONGODB_DATABASE=springclouddb
+            - MONGODB_USER=admin
+            - MONGODB_PASSWORD=123456
+            - EUREKA_SERVER=eureka-server
+            - EUREKA_PORT=8761
+            - ENABLED_EUREKA=true
+            - WEB_SOCKET_SERVER_URL=http://vehicle-websocket:8085/api/v1/vehicle
+            - DRIVER_SERVICE_URL=http://driver-service/api/v1
+        ports:
+            - 8080:8083
+        networks:
+            - microservice-network
+networks: 
+    microservice-network:
+        driver: bridge

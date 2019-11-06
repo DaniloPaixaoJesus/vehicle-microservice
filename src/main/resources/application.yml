@@ -3,13 +3,13 @@ spring:
     name: vehicle-service
   data:
     mongodb:
-      uri: mongodb://admin:senha123@ds141208.mlab.com:41208/springclouddb
-      database: springclouddb
+      uri: mongodb://${MONGODB_USER:admin}:${MONGODB_PASSWORD:senha123}@${MONGODB_HOST:ds141208.mlab.com}:${MONGODB_PORT:41208}/${MONGODB_DATABASE:springclouddb}
+      database: ${MONGODB_DATABASE:springclouddb}
 server:
   port: 8080
 eureka:
   client:
-    enabled: false
+    enabled: ${ENABLED_EUREKA:false}
     serviceUrl:
       defaultZone: http://${EUREKA_SERVER:localhost}:${EUREKA_PORT:8761}/eureka/
 management:
@@ -23,7 +23,7 @@ br:
     danilopaixao:
       service:
         driver:
-          url: http://driver-service/api/v1
+          url: ${DRIVER_SERVICE_URL:http://localhost:8082/api/v1}
         vehicle:
           socket:
-            url: http://vehicle-websocket:8085/api/v1/vehicle
+            url: ${WEB_SOCKET_SERVER_URL:http://localhost:8085/api/v1/vehicle}
