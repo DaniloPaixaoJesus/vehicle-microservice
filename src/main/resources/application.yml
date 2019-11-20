@@ -3,7 +3,7 @@ spring:
     name: vehicle-service
   data:
     mongodb:
-      uri: mongodb://${MONGODB_USER:admin}:${MONGODB_PASSWORD:senha123}@${MONGODB_HOST:ds141208.mlab.com}:${MONGODB_PORT:41208}/${MONGODB_DATABASE:springclouddb}
+      uri: ${MONGODB_URI:mongodb://admin:senha123@ds141208.mlab.com:41208/springclouddb}
       database: ${MONGODB_DATABASE:springclouddb}
 server:
   port: 8080

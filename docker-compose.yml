@@ -1,23 +1,37 @@
 version: '2'
 services:
+    mongodb:
+        image: mongo
+        command: mongod --port 27017
+        container_name: mongodb
+        restart: always
+        environment:
+            MONGO_INITDB_DATABASE: springclouddb
+#            MONGO_INITDB_ROOT_USERNAME: admin
+#            MONGO_INITDB_ROOT_PASSWORD: 123456
+        ports:
+            - '27017:27017'
+        networks: 
+            - microservice-network
     vehicle-service:
         container_name: vehicle-service
         build:
             dockerfile: ./vehicle.service.dockerfile
             context: .
         environment:
-            - MONGODB_HOST=mongodb
-            - MONGODB_PORT=27017
+            - MONGODB_URI=mongodb://mongodb:27017
             - MONGODB_DATABASE=springclouddb
-            - MONGODB_USER=admin
-            - MONGODB_PASSWORD=123456
             - EUREKA_SERVER=eureka-server
             - EUREKA_PORT=8761
-            - ENABLED_EUREKA=true
+            - ENABLED_EUREKA=false
             - WEB_SOCKET_SERVER_URL=http://vehicle-websocket:8085/api/v1/vehicle
             - DRIVER_SERVICE_URL=http://driver-service/api/v1
         ports:
-            - 8080:8083
+            - 8083:8080
+        depends_on: 
+            - "mongodb"
+        links:
+            - mongodb
         networks:
             - microservice-network
 networks: 
