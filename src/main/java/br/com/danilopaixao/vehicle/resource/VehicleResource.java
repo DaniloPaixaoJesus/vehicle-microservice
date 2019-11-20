@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import br.com.danilopaixao.vehicle.enums.StatusEnum;
 import br.com.danilopaixao.vehicle.model.Vehicle;
@@ -47,14 +48,24 @@ public class VehicleResource {
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody VehicleSummary getVehicleSummary(@PathVariable("vin") final String vin){
 		logger.info("##VehicleResource#getVehicleSummary: {}", vin);
-		return service.getVehicleSummary(vin);
+		VehicleSummary r = service.getVehicleSummary(vin);
+		if(r == null) {
+			throw new ResponseStatusException(
+			          HttpStatus.NOT_FOUND, "vehicle not found");
+		}
+		return r;
 	}
 	
 	@GetMapping(value="/{vin}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Vehicle getVehicle(@PathVariable("vin") final String vin){
 		logger.info("##VehicleResource#getVehicle: {}", vin);
-		return service.getVehicle(vin);
+		Vehicle r = service.getVehicle(vin);
+		if(r == null) {
+			throw new ResponseStatusException(
+			          HttpStatus.NOT_FOUND, "vehicle not found");
+		}
+		return r;
 	}
 	
 	@PutMapping(value="/{vin}/status", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -62,6 +73,11 @@ public class VehicleResource {
 	public @ResponseBody Vehicle updateStatus(@PathVariable("vin") final String vin,
 			@RequestBody(required = true) final StatusEnum status){
 		logger.info("##VehicleResource#updateStatus: {} , {}", vin, status);
-		return service.updateStatus(vin, status);
+		Vehicle r = service.updateStatus(vin, status); 
+		if(r == null) {
+			throw new ResponseStatusException(
+			          HttpStatus.NOT_ACCEPTABLE, "impossible change - vehicle not found");
+		}
+		return r;
 	}
 }
