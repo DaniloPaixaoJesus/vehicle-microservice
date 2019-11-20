@@ -18,7 +18,6 @@ import br.com.danilopaixao.vehicle.model.Vehicle;
 import br.com.danilopaixao.vehicle.repository.VehicleMongoRepository;
 import br.com.danilopaixao.vehicle.service.DriverService;
 import br.com.danilopaixao.vehicle.service.VehicleService;
-import br.com.danilopaixao.vehicle.service.VehicleSocketService;
 import br.com.danilopaixao.vehicle.test.builder.VehicleTestBuilder;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -29,9 +28,6 @@ public class VehicleServiceTest {
 	
 	@Mock
 	private DriverService driverService;
-	
-	@Mock
-	private VehicleSocketService vehicleSocketService;
 	
 	@Mock
 	private VehicleMongoRepository vehicleMongoRepository;
@@ -51,16 +47,6 @@ public class VehicleServiceTest {
 		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.ON);
 		assertSame(StatusEnum.ON, vReturned.getStatus());
 	}
-	
-//	@Test(expected = RestClientException.class)
-//	public void testUpdateVehicleONWebSocketError() throws Exception{
-//		Vehicle vehicleGet = vehicleBuilder.buildRandom(StatusEnum.OFF);
-//		Optional<Vehicle> vOptional = Optional.of(vehicleGet);
-//		when(vehicleSocketService.updateStatusWebSocket(vehicleGet.getVin(), StatusEnum.ON))
-//										.thenThrow(RestClientException.class);
-//		when(vehicleMongoRepository.findById(vehicleGet.getVin())).thenReturn(vOptional);
-//		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.ON);
-//	}
 	
 	@Test
 	public void testUpdateVehicleOFF() throws Exception{

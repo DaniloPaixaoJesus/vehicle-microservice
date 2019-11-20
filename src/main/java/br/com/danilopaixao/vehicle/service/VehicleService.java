@@ -24,9 +24,6 @@ public class VehicleService {
 	private DriverService driverService;
 	
 	@Autowired
-	private VehicleSocketService vehicleSocketService;
-	
-	@Autowired
 	private VehicleMongoRepository vehicleMongoRepository;
 	
 	public List<Vehicle> init(){
@@ -47,7 +44,6 @@ public class VehicleService {
 	
 	public Vehicle updateStatus(final String vin, final StatusEnum status){
 		logger.info("##VehicleService#updateStatus vin {}, status {}", vin, status);
-		vehicleSocketService.updateStatusWebSocket(vin, status);
 		return vehicleMongoRepository.findById(vin)
 								.map(v-> {
 									v.setStatus(status);
