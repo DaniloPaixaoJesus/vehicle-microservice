@@ -19,18 +19,17 @@ public class Vehicle implements Serializable{
 	private String vin;
 	private String regNumber;
 	private String name;
-	private String driverId;
 	private StatusEnum status;
+	private Location geolocation;
 
 	public Vehicle() {}
 
-	public Vehicle(String vin, String regNumber, String name, StatusEnum status, String driverId) {
+	public Vehicle(String vin, String regNumber, String name, StatusEnum status) {
 		super();
 		this.vin = vin;
 		this.regNumber = regNumber;
 		this.name = name;
 		this.status = status;
-		this.driverId = driverId;
 	}
 
 	public String getName() {
@@ -39,15 +38,6 @@ public class Vehicle implements Serializable{
 
 	public void setName(String name) {
 		this.name = name;
-	}
-
-
-	public String getDriverId() {
-		return driverId;
-	}
-
-	public void setDriverId(String driverId) {
-		this.driverId = driverId;
 	}
 
 	public String getVin() {
@@ -74,11 +64,18 @@ public class Vehicle implements Serializable{
 		this.status = status;
 	}
 
+	public Location getGeolocation() {
+		return geolocation;
+	}
+
+	public void setGeolocation(Location geolocation) {
+		this.geolocation = geolocation;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((driverId == null) ? 0 : driverId.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((regNumber == null) ? 0 : regNumber.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
@@ -95,11 +92,6 @@ public class Vehicle implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Vehicle other = (Vehicle) obj;
-		if (driverId == null) {
-			if (other.driverId != null)
-				return false;
-		} else if (!driverId.equals(other.driverId))
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -122,8 +114,8 @@ public class Vehicle implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Vehicle [vin=" + vin + ", regNumber=" + regNumber + ", name=" + name + ", driverId=" + driverId
-				+ ", status=" + status + "]";
+		return "Vehicle [vin=" + vin + ", regNumber=" + regNumber + ", name=" + name + ", status=" + status + "]";
 	}
+
 
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,9 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
-import br.com.danilopaixao.vehicle.enums.StatusEnum;
 import br.com.danilopaixao.vehicle.model.Vehicle;
-import br.com.danilopaixao.vehicle.model.VehicleSummary;
+import br.com.danilopaixao.vehicle.model.VehicleTrack;
 import br.com.danilopaixao.vehicle.service.VehicleService;
 
 @RestController
@@ -37,23 +37,10 @@ public class VehicleResource {
 		return service.init();
 	}
 	
-	@GetMapping(value="", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody List<VehicleSummary> getAllVehicle(){
-		logger.info("##VehicleResource#getAllVehicle: no argument");
-		return service.getAllVehicleSummary();
-	}
-	
-	@GetMapping(value="/{vin}/summary", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody VehicleSummary getVehicleSummary(@PathVariable("vin") final String vin){
-		logger.info("##VehicleResource#getVehicleSummary: {}", vin);
-		VehicleSummary r = service.getVehicleSummary(vin);
-		if(r == null) {
-			throw new ResponseStatusException(
-			          HttpStatus.NOT_FOUND, "vehicle not found");
-		}
-		return r;
+	@GetMapping(value = "/near/{latitude}/{longitude}/{distance}")
+	public List<Vehicle> findNearest(@PathVariable("latitude") final double latitude, 
+			@PathVariable("longitude") final double longitude, @PathVariable("distance") final double distance) {
+		return service.findByGeolocationWithin(latitude, longitude, distance);
 	}
 	
 	@GetMapping(value="/{vin}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -71,13 +58,25 @@ public class VehicleResource {
 	@PutMapping(value="/{vin}/status", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
 	public @ResponseBody Vehicle updateStatus(@PathVariable("vin") final String vin,
-			@RequestBody(required = true) final StatusEnum status){
-		logger.info("##VehicleResource#updateStatus: {} , {}", vin, status);
-		Vehicle r = service.updateStatus(vin, status); 
+			@RequestBody(required = true) final VehicleTrack vehicleTrack){
+		logger.info("##VehicleResource#updateStatus: {} , {}", vin, vehicleTrack);
+		Vehicle r = service.updateStatus(vin, vehicleTrack.getStatus(), vehicleTrack.getGeolocation()); 
 		if(r == null) {
 			throw new ResponseStatusException(
 			          HttpStatus.NOT_ACCEPTABLE, "impossible change - vehicle not found");
 		}
 		return r;
+	}
+	
+	@PostMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.CREATED)
+	public Vehicle insertNewVehicle(@RequestBody(required = true) final Vehicle vehicle) {
+		return service.insertVehicle(vehicle);
+	}
+	
+	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseStatus(HttpStatus.OK)
+	public List<Vehicle> findAllVehicles() {
+		return service.getAllVehicle();
 	}
 }

@@ -10,19 +10,17 @@ public class VehicleTestBuilder {
 	private String vin;
 	private String regNumber;
 	private String name;
-	private String driverId;
 	private StatusEnum status;
 	
 	public Vehicle buildRandom(StatusEnum status) {
 		return new Vehicle(RandomStringUtils.random(25, true, true), 
 						   RandomStringUtils.random(15, true, true),
 						   RandomStringUtils.random(10, true, false), 
-						   status,
-						   RandomStringUtils.random(15, true, true));
+						   status);
 	}
 	
 	public Vehicle build() {
-		return new Vehicle(vin, regNumber, name, status, driverId);
+		return new Vehicle(vin, regNumber, name, status);
 	}
 	
 	public VehicleTestBuilder setVin(String vin) {
@@ -35,10 +33,6 @@ public class VehicleTestBuilder {
 	}
 	public VehicleTestBuilder setName(String name) {
 		this.name = name;
-		return this;
-	}
-	public VehicleTestBuilder setDriverId(String driverId) {
-		this.driverId = driverId;
 		return this;
 	}
 	public VehicleTestBuilder setStatus(StatusEnum status) {
