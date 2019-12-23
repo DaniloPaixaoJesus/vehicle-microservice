@@ -4,6 +4,7 @@ package br.com.danilopaixao.vehicle.test.service;
 import static org.junit.Assert.assertSame;
 import static org.mockito.Mockito.when;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.junit.Before;
@@ -14,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import br.com.danilopaixao.vehicle.enums.StatusEnum;
+import br.com.danilopaixao.vehicle.model.Location;
 import br.com.danilopaixao.vehicle.model.Vehicle;
 import br.com.danilopaixao.vehicle.repository.VehicleMongoRepository;
 import br.com.danilopaixao.vehicle.service.DriverService;
@@ -44,7 +46,7 @@ public class VehicleServiceTest {
 		Vehicle vehicleGet = vehicleBuilder.buildRandom(StatusEnum.OFF);
 		Optional<Vehicle> vOptional = Optional.of(vehicleGet);
 		when(vehicleMongoRepository.findById(vehicleGet.getVin())).thenReturn(vOptional);
-		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.ON);
+		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.ON, new Location(), LocalDateTime.now());
 		assertSame(StatusEnum.ON, vReturned.getStatus());
 	}
 	
@@ -53,7 +55,7 @@ public class VehicleServiceTest {
 		Vehicle vehicleGet = vehicleBuilder.buildRandom(StatusEnum.ON);
 		Optional<Vehicle> vOptional = Optional.of(vehicleGet);
 		when(vehicleMongoRepository.findById(vehicleGet.getVin())).thenReturn(vOptional);
-		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.OFF);
+		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.OFF, new Location(), LocalDateTime.now());
 		assertSame(StatusEnum.OFF, vReturned.getStatus());
 	}
 		
@@ -63,7 +65,7 @@ public class VehicleServiceTest {
 		Vehicle vehicleGet = vehicleBuilder.buildRandom(StatusEnum.ON);
 		when(vehicleMongoRepository.findById(vehicleGet.getVin()))
 						.thenReturn(Optional.ofNullable(null).empty());
-		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.OFF);
+		Vehicle vReturned = vehicleService.updateStatus(vehicleGet.getVin(), StatusEnum.OFF, new Location(), LocalDateTime.now());
 		assertSame(null, vReturned);
 	}
 	

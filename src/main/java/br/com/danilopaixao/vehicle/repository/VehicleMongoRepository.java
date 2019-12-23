@@ -9,4 +9,5 @@ import br.com.danilopaixao.vehicle.model.Vehicle;
 
 public interface VehicleMongoRepository extends MongoRepository<Vehicle, String> {
 	List<Vehicle> findByGeolocationWithin(Circle circle);
+	List<Vehicle> findByVin(String vin);
 }

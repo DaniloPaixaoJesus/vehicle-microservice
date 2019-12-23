@@ -1,10 +1,16 @@
 package br.com.danilopaixao.vehicle.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+
+import br.com.danilopaixao.vehicle.LocalDateTimeDeserializer;
+import br.com.danilopaixao.vehicle.LocalDateTimeSerializer;
 import br.com.danilopaixao.vehicle.enums.StatusEnum;
 
 @Document(collection = "vehicle")
@@ -21,8 +27,24 @@ public class Vehicle implements Serializable{
 	private String name;
 	private StatusEnum status;
 	private Location geolocation;
+	
+	@JsonSerialize(using = LocalDateTimeSerializer.class)
+	@JsonDeserialize(using = LocalDateTimeDeserializer.class)
+	private LocalDateTime dtStatus;
 
 	public Vehicle() {}
+	
+	public Vehicle(String vin, String regNumber, String name, StatusEnum status,
+			Location geolocation, LocalDateTime dtStatus) {
+		super();
+		this.vin = vin;
+		this.regNumber = regNumber;
+		this.name = name;
+		this.status = status;
+		this.geolocation = geolocation;
+		this.dtStatus = dtStatus;
+		
+	}
 
 	public Vehicle(String vin, String regNumber, String name, StatusEnum status) {
 		super();
@@ -70,6 +92,15 @@ public class Vehicle implements Serializable{
 
 	public void setGeolocation(Location geolocation) {
 		this.geolocation = geolocation;
+	}
+	
+
+	public LocalDateTime getDtStatus() {
+		return dtStatus;
+	}
+
+	public void setDtStatus(LocalDateTime dtStatus) {
+		this.dtStatus = dtStatus;
 	}
 
 	@Override

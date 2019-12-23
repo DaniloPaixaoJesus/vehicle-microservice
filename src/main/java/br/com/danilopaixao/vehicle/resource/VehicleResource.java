@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import br.com.danilopaixao.vehicle.model.Vehicle;
+import br.com.danilopaixao.vehicle.model.VehicleList;
 import br.com.danilopaixao.vehicle.model.VehicleTrack;
 import br.com.danilopaixao.vehicle.service.VehicleService;
 
@@ -33,8 +34,14 @@ public class VehicleResource {
 	
 	@GetMapping(value="/init", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody List<Vehicle> init(){
+	public @ResponseBody VehicleList init(){
 		return service.init();
+	}
+	
+	@GetMapping(value = "/near2/{latitude}/{longitude}/{distance}")
+	public List<Vehicle> findNearest2(@PathVariable("latitude") final double latitude, 
+			@PathVariable("longitude") final double longitude, @PathVariable("distance") final double distance) {
+		return service.findByGeolocationWithin2(latitude, longitude, distance);
 	}
 	
 	@GetMapping(value = "/near/{latitude}/{longitude}/{distance}")
@@ -45,9 +52,9 @@ public class VehicleResource {
 	
 	@GetMapping(value="/{vin}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public @ResponseBody Vehicle getVehicle(@PathVariable("vin") final String vin){
+	public @ResponseBody List<Vehicle> getVehicle(@PathVariable("vin") final String vin){
 		logger.info("##VehicleResource#getVehicle: {}", vin);
-		Vehicle r = service.getVehicle(vin);
+		List<Vehicle> r = service.getVehicle(vin);
 		if(r == null) {
 			throw new ResponseStatusException(
 			          HttpStatus.NOT_FOUND, "vehicle not found");
@@ -60,7 +67,7 @@ public class VehicleResource {
 	public @ResponseBody Vehicle updateStatus(@PathVariable("vin") final String vin,
 			@RequestBody(required = true) final VehicleTrack vehicleTrack){
 		logger.info("##VehicleResource#updateStatus: {} , {}", vin, vehicleTrack);
-		Vehicle r = service.updateStatus(vin, vehicleTrack.getStatus(), vehicleTrack.getGeolocation()); 
+		Vehicle r = service.updateStatus(vin, vehicleTrack.getStatus(), vehicleTrack.getGeolocation(), vehicleTrack.getDtStatus()); 
 		if(r == null) {
 			throw new ResponseStatusException(
 			          HttpStatus.NOT_ACCEPTABLE, "impossible change - vehicle not found");
@@ -76,7 +83,7 @@ public class VehicleResource {
 	
 	@GetMapping(value = "", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseStatus(HttpStatus.OK)
-	public List<Vehicle> findAllVehicles() {
+	public VehicleList findAllVehicles() {
 		return service.getAllVehicle();
 	}
 }

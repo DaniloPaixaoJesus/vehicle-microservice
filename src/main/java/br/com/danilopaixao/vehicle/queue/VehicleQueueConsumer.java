@@ -33,7 +33,8 @@ public class VehicleQueueConsumer {
 			vehicleTrackPayload = jsonMapper.readValue(payload, VehicleTrack.class);
 			vehicleService.updateStatus(vehicleTrackPayload.getVin(), 
 										vehicleTrackPayload.getStatus(), 
-										vehicleTrackPayload.getGeolocation());
+										vehicleTrackPayload.getGeolocation(),
+										vehicleTrackPayload.getDtStatus());
 		} catch (IOException e) {
 			logger.error(e.getCause().getMessage());
 			throw new RuntimeException(e);
